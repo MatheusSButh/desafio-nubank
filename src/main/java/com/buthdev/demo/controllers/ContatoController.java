@@ -1,12 +1,15 @@
 package com.buthdev.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.buthdev.demo.dto.ContatoDTO;
+import com.buthdev.demo.dto.ContatoResponseDTO;
 import com.buthdev.demo.model.Cliente;
 import com.buthdev.demo.model.Contato;
 import com.buthdev.demo.repositories.ClienteRepository;
@@ -23,15 +26,16 @@ public class ContatoController {
 	ClienteRepository clienteRepository;
 	
 	@PostMapping
-	public Contato createContato(@RequestBody ContatoDTO contatoDto) {
+	public ResponseEntity<ContatoResponseDTO> createContato(@RequestBody ContatoDTO contatoDto) {
 		Contato contato = new Contato();
-		
 		contato.setTelefone(contatoDto.getTelefone());
 		
 		Cliente cliente = clienteRepository.findById(contatoDto.getClienteId())
 				.orElseThrow(() -> new RuntimeException("Cliente não encontrado."));
 		contato.setCliente(cliente);
 		
-		return contatoRepository.save(contato);
+		contatoRepository.save(contato);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 }

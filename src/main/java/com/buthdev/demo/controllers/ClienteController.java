@@ -3,6 +3,7 @@ package com.buthdev.demo.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,7 @@ public class ClienteController {
 	@PostMapping
 	public ResponseEntity<Cliente> createCliente(@RequestBody ClienteDTO clienteDto) {
 		clienteService.createCliente(clienteDto);
-		return ResponseEntity.ok().build();
+		return ResponseEntity.status(HttpStatus.CREATED).build();
 	}
 	
 	@GetMapping
@@ -37,7 +38,13 @@ public class ClienteController {
 	
 	@GetMapping(value = "/{id}/contatos")
 	public ResponseEntity<List<ContatoResponseDTO>> findContactsByCliente(@PathVariable Long id) {
-		return ResponseEntity.ok().body(clienteService.findContactsByCliente(id));
+		List<ContatoResponseDTO> contatos = clienteService.findContactsByCliente(id);
+		
+		if(contatos.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		}
+		
+		return ResponseEntity.ok().body(contatos);
 	}
 	
 }
