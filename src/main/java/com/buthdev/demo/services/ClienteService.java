@@ -46,6 +46,7 @@ public class ClienteService {
 			ContatoResponseDTO contatoDto = new ContatoResponseDTO();
 			contatoDto.setId(x.getId());
 			contatoDto.setTelefone(x.getTelefone());
+			contatoDto.setClienteId(x.getCliente() != null ? x.getCliente().getId() : null);
 			return contatoDto;
 		}).collect(Collectors.toList());
 		
@@ -63,6 +64,7 @@ public class ClienteService {
 			ContatoResponseDTO contatoDto = new ContatoResponseDTO();
 			contatoDto.setId(x.getId());
 			contatoDto.setTelefone(x.getTelefone());
+			contatoDto.setClienteId(x.getCliente() != null ? x.getCliente().getId() : null);
 			return contatoDto;
 		}).collect(Collectors.toList());
 		dto.setContatos(contatos);
