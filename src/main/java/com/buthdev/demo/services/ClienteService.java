@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.buthdev.demo.dto.ClienteDTO;
 import com.buthdev.demo.dto.ClienteResponseDTO;
 import com.buthdev.demo.dto.ContatoResponseDTO;
+import com.buthdev.demo.exceptions.ClienteNotFoundException;
 import com.buthdev.demo.model.Cliente;
 import com.buthdev.demo.model.Contato;
 import com.buthdev.demo.repositories.ClienteRepository;
@@ -40,7 +41,7 @@ public class ClienteService {
 	}
 	
 	public List<ContatoResponseDTO> findContactsByCliente(Long id) {
-		Cliente cliente =  clienteRepository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+		Cliente cliente =  clienteRepository.findById(id).orElseThrow(() -> new ClienteNotFoundException(id));
 		
 		List<ContatoResponseDTO> contatosDto = cliente.getContatos().stream().map(x -> {
 			ContatoResponseDTO contatoDto = new ContatoResponseDTO();
